@@ -1,11 +1,35 @@
 {
-    "name": "@kanaka/wamp",
-    "version": "1.0.9",
+    "name": "@ark-us/wamp",
+    "version": "1.0.9-alpha.3",
     "description": "WebAssembly Macro language processor",
+    "main": "wamp.js",
+    "browser": "dist/index.umd.js",
+    "module": "dist/index.esm.js",
     "bin": {
         "wamp": "./wamp"
     },
+    "scripts": {
+        "build": "rollup -c"
+    },
     "dependencies": {
         "docopt": "0.6.2"
+    },
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^26.0.1",
+        "@rollup/plugin-node-resolve": "^15.2.3",
+        "@rollup/plugin-terser": "^0.4.4",
+        "rollup": "^4.21.2",
+        "rollup-plugin-node-builtins": "^2.1.2",
+        "rollup-plugin-node-globals": "^1.4.0",
+        "rollup-plugin-strip-shebang": "^2.0.0"
+    },
+    "type": "module",
+    "files": [
+        "dist",
+        "wamp.js",
+        "wamp"
+    ],
+    "publishConfig": {
+        "access": "public"
     }
 }

@@ -1,5 +1,7 @@
 # wam: WebAssembly Macro language and processor
 
+web-friendly version of https://github.com/kanaka/wam
+
 ## wam syntax
 
 Wam syntax is a near superset of wat syntax that is more convenient
