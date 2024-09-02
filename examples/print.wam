@@ -11,7 +11,8 @@
   ;; Small recursive integer to string
   (func $itoa (param $n i32 $buf i32) (result i32)
     (if (i32.ne 0 (i32.div_s $n 10))
-      (local.set $buf ($itoa (i32.div_s $n 10) $buf)))
+      (then (local.set $buf ($itoa (i32.div_s $n 10) $buf)))
+    )
 
     (i32.store8 $buf (i32.add (CHR "0") (i32.rem_s $n 10)))
     (local.set $buf (i32.add $buf 1))

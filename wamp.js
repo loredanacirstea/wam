@@ -174,10 +174,14 @@ function AND(args, ctx) {
         let a = wam_eval(arg, ctx)
         res = new List([new Literal('if'),
                         new List([new Literal('result'),
-                                  new Literal('i32')]), a,
-                                  res,
-                                  new List([new Literal('i32.const'),
-                                            new Integer(0)])])
+                                  new Literal('i32')]),
+                        a,
+                        new List([new Literal('then'), res]),
+                        new List([new Literal('else'),
+                            new List([new Literal('i32.const'),
+                                new Integer(0)])
+                        ]),
+        ])
     }
     return res
 }
@@ -189,10 +193,12 @@ function OR(args, ctx) {
         let a = wam_eval(arg, ctx)
         res = new List([new Literal('if'),
                         new List([new Literal('result'),
-                                  new Literal('i32')]), a,
-                                  new List([new Literal('i32.const'),
-                                            new Integer(1)]),
-                                  res])
+                                  new Literal('i32')]),
+                        a,
+                        new List([new Literal('then'), new List([new Literal('i32.const'),
+                            new Integer(1)])]),
+                            new List([new Literal('else'), res]),
+        ])
     }
     return res
 }
@@ -523,7 +529,7 @@ function emit_module(asts, ctx, opts) {
     all_tokens.push(...[].concat.apply([], hoist_imports), "\n")
 
     if (!ctx.memory_defined) {
-        all_tokens.push(`  (memory ${opts.memorySize})\n\n`)
+        all_tokens.push(`  (memory (export "memory") ${opts.memorySize})\n\n`)
     }
     if (!ctx.memoryBase_defined) {
         all_tokens.push(`  (global $memoryBase i32 (i32.const ${opts.memoryBase}))\n\n`)

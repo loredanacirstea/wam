@@ -1,6 +1,6 @@
 {
     "name": "@ark-us/wamp",
-    "version": "1.0.9-alpha.5",
+    "version": "1.0.9-alpha.6",
     "description": "WebAssembly Macro language processor",
     "main": "wamp.js",
     "browser": "dist/index.umd.js",
