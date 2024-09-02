@@ -277,9 +277,10 @@ const macros = {
 // eval / macro expansion
 //
 
-const EMIT_HOIST_ORDER = ['memory', 'import', 'global', 'table']
-const EVAL_HOIST = new Set(EMIT_HOIST_ORDER)
-const EVAL_NONE =  new Set(['memory', 'import', 'export', 'start', 'type',
+const EMIT_IMPORTS = 'import'
+const EMIT_HOIST_ORDER = ['memory', 'global', 'table']
+const EVAL_HOIST = new Set([EMIT_IMPORTS, ...EMIT_HOIST_ORDER])
+const EVAL_NONE =  new Set(['import', 'memory', 'export', 'start', 'type',
                             'global.get', 'local', 'local.get',
                             'param', 'br', 'i32.const', 'i64.const',
                             'f32.const', 'f64.const'])
@@ -503,6 +504,10 @@ function emit_module(asts, ctx, opts) {
 
 
     let mod_tokens = asts.map(a => wam_emit(a, ctx))
+    let hoist_imports = []
+    if (ctx.hoist[EMIT_IMPORTS]) {
+        hoist_imports.push(...ctx.hoist[EMIT_IMPORTS].map(a => wam_emit(a, ctx)))
+    }
     let hoist_tokens = []
     //console.warn(ctx.hoist)
     for (let kind of EMIT_HOIST_ORDER) {
@@ -514,6 +519,9 @@ function emit_module(asts, ctx, opts) {
     let all_tokens = [
         `(module $${(ctx.modules).join('__')}\n\n`
     ]
+    // Hoisted imports - they must be first
+    all_tokens.push(...[].concat.apply([], hoist_imports), "\n")
+
     if (!ctx.memory_defined) {
         all_tokens.push(`  (memory ${opts.memorySize})\n\n`)
     }
